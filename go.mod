@@ -10,5 +10,6 @@ require (
 	github.com/golang/glog v0.0.0-20160126235308-23def4e6c14b
 	github.com/google/go-cmp v0.3.0
 	github.com/google/go-github/v27 v27.0.4
+	github.com/tvanriper/selenium v0.9.9
 	google.golang.org/api v0.7.0
 )
