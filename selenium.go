@@ -349,8 +349,11 @@ type WebDriver interface {
 	// SetAlertText sets the current alert text.
 	SetAlertText(text string) error
 
+	// RequestURL builds a URL for Execute.
+	RequestURL(template string, args ...interface{}) string
+
 	// Execute executes a raw URL
-	Execute(methid, url string, data []byte) (json.RawMessage, error)
+	Execute(method, url string, data []byte) (json.RawMessage, error)
 
 	// ExecuteScript executes a script.
 	ExecuteScript(script string, args []interface{}) (interface{}, error)

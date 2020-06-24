@@ -72,6 +72,10 @@ func newRequest(method string, url string, data []byte) (*http.Request, error) {
 	return request, nil
 }
 
+func (wd *remoteWD) RequestURL(template string, args ...interface{}) string {
+	return wd.requestURL(template, args...)
+}
+
 func (wd *remoteWD) requestURL(template string, args ...interface{}) string {
 	return wd.urlPrefix + fmt.Sprintf(template, args...)
 }
