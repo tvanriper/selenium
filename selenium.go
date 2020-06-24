@@ -1,6 +1,7 @@
 package selenium
 
 import (
+	"encoding/json"
 	"time"
 
 	"github.com/tebeka/selenium/chrome"
@@ -347,6 +348,9 @@ type WebDriver interface {
 	AlertText() (string, error)
 	// SetAlertText sets the current alert text.
 	SetAlertText(text string) error
+
+	// Execute executes a raw URL
+	Execute(methid, url string, data []byte) (json.RawMessage, error)
 
 	// ExecuteScript executes a script.
 	ExecuteScript(script string, args []interface{}) (interface{}, error)

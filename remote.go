@@ -1146,6 +1146,10 @@ func (wd *remoteWD) execScript(script string, args []interface{}, suffix string)
 	return reply.Value, nil
 }
 
+func (wd *remoteWD) Execute(method, url string, data []byte) (json.RawMessage, error) {
+	return wd.execute(method, url, data)
+}
+
 func (wd *remoteWD) ExecuteScript(script string, args []interface{}) (interface{}, error) {
 	if !wd.w3cCompatible {
 		return wd.execScript(script, args, "")
