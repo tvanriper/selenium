@@ -194,6 +194,39 @@ func NewSeleniumService(jarPath string, port int, opts ...ServiceOption) (*Servi
 	return s, nil
 }
 
+// NewSeleniumServiceJavaArgs starts a Selenium instance in the background with additional args for the java executable.
+func NewSeleniumServiceJavaArgs(jarPath string, port int, jargs []string, opts ...ServiceOption) (*Service, error) {
+	s, err := newService(exec.Command("java"), "/wd/hub", port, opts...)
+	if err != nil {
+		return nil, err
+	}
+	if s.javaPath != "" {
+		s.cmd.Path = s.javaPath
+	}
+	if s.geckoDriverPath != "" {
+		s.cmd.Args = append([]string{"java", "-Dwebdriver.gecko.driver=" + s.geckoDriverPath}, s.cmd.Args[1:]...)
+	}
+	if s.chromeDriverPath != "" {
+		s.cmd.Args = append([]string{"java", "-Dwebdriver.chrome.driver=" + s.chromeDriverPath}, s.cmd.Args[1:]...)
+	}
+
+	var classpath []string
+	if s.htmlUnitPath != "" {
+		classpath = append(classpath, s.htmlUnitPath)
+	}
+	classpath = append(classpath, jarPath)
+	s.cmd.Args = append(s.cmd.Args, "-cp", strings.Join(classpath, ":"))
+	s.cmd.Args = append(s.cmd.Args, "org.openqa.grid.selenium.GridLauncherV3", "-port", strconv.Itoa(port), "-debug")
+	for _, ja := range jargs {
+		s.cmd.Args = append(s.cmd.Args, ja)
+	}
+
+	if err := s.start(port); err != nil {
+		return nil, err
+	}
+	return s, nil
+}
+
 // NewChromeDriverService starts a ChromeDriver instance in the background.
 func NewChromeDriverService(path string, port int, opts ...ServiceOption) (*Service, error) {
 	cmd := exec.Command(path, "--port="+strconv.Itoa(port), "--url-base=wd/hub", "--verbose")
